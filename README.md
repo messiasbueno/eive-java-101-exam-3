@@ -6,22 +6,23 @@
    3) Sempre que uma nova depenência é adicionada no projeto o `Mavem` identifica e baixa de forma altomatica sem que o desenvolvedor precise se preocupar.
 
    Assinale a alternativa que corresponte apenas as informações verdadeiras.
-   - [ ] III, apenas
-   - [ ] I e II
-   - [ ] I e III 
-   - [ ] II e III
-   - [ ] I, II e III
+   - [ ] iii, apenas
+   - [ ] i e ii
+   - [ ] i e iii 
+   - [ ] ii e iii
+   - [ ] i, ii e iii
 
-2) No `Maven` existem alguns comandos que são conhecidos como `goal`, com base no seu conhecimento, leia as afirmativas abaixo e assinale a alternativa correta
+2) No `Maven` existem alguns comandos que são conhecidos como `goal`, Sabendo disso leia as afirmativas abaixo.
    1) O comando `mvn test` tem como finalidade executar os testes do projeto
    2) O comando `mvn deploy production` é usado quando precisa gerar o artefado para o ambiente de produção
    3) `mvn install` é o goal que realiza a instalação do projeto no diretório local
 
-   - [ ] I, apenas
-   - [ ] II apenas
-   - [ ] I e II apenas
-   - [ ] I e III apenas
-   - [ ] II e III, apenas
+   Assinale a alternativa que corresponte apenas as informações verdadeiras.
+   - [ ] i, apenas
+   - [ ] ii apenas
+   - [ ] i e ii apenas
+   - [ ] i e iii apenas
+   - [ ] ii e iii, apenas
  
 3) Supondo que existe um banco de dados onde neste banco de dados existe uma tabela com o nome `Produto` e nesta tabela temos dois registros: 
    ```
@@ -134,11 +135,11 @@
 
     Assinale apenas as alternativas que correspondem a afirmações verdadeiras
 
-    - [ ] I, apenas
-    - [ ] I e II, apenas
-    - [ ] II e III, apenas
-    - [ ] I, II e III
-    - [ ] nenhuma das afirmativas
+    - [ ] i, apenas
+    - [ ] i e ii, apenas
+    - [ ] ii e iii, apenas
+    - [ ] i, ii e iii
+    - [ ] Nenhuma das afirmativas
 
 20) Escreva um exemplo de implementação e uso de um `CrudRepository` para a classe da entidade `Cores.java`.
 
