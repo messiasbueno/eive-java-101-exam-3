@@ -1,23 +1,23 @@
 # eive-java-101-exam-3
 
-1) No Maven o arquivo `pom.xml` é o principal arquivo de configuração de dependencias. Sabendo disso leia as afirmativas abaixo.
+1) No Maven o arquivo `pom.xml` é o principal arquivo de configuração de dependências. Sabendo disso leia as afirmativas abaixo.
    1) A dependências podem ser adicionadas diretamente na pasta lib do projeto e este após compilar continua reconhecendo.
    2) A dependências seguem um padrão de organização, sempre devem ser adicionadas na sessão `<dependencies>` do arquivo.
-   3) Sempre que uma nova depenência é adicionada no projeto o `Mavem` identifica e baixa de forma altomatica sem que o desenvolvedor precise se preocupar.
+   3) Sempre que uma nova dependência é adicionada no projeto o `Mavem` identifica e baixa de forma automática sem que o desenvolvedor precise se preocupar.
 
-   Assinale a alternativa que corresponte apenas as informações verdadeiras.
+   Assinale a alternativa que corresponde apenas as informações verdadeiras.
    - [ ] iii, apenas
    - [ ] i e ii
    - [ ] i e iii 
    - [ ] ii e iii
    - [ ] i, ii e iii
 
-2) No `Maven` existem alguns comandos que são conhecidos como `goal`, Sabendo disso leia as afirmativas abaixo.
+2) No `Maven` existem alguns comandos que são conhecidos como `goal`. Sabendo disso leia as afirmativas abaixo.
    1) O comando `mvn test` tem como finalidade executar os testes do projeto
    2) O comando `mvn deploy production` é usado quando precisa gerar o artefado para o ambiente de produção
    3) `mvn install` é o goal que realiza a instalação do projeto no diretório local
 
-   Assinale a alternativa que corresponte apenas as informações verdadeiras.
+   Assinale a alternativa que corresponde apenas as informações verdadeiras.
    - [ ] i, apenas
    - [ ] ii apenas
    - [ ] i e ii apenas
@@ -63,7 +63,7 @@
 
 7) Quais as desvantagens de usar o JDBC em uma aplicação?
 
-8) Explique de forma suscinta como funciona o cliclo de vida de uma aplicação JPA
+8) Explique de forma sucinta como funciona o ciclo de vida de uma aplicação JPA
 
 9) Sobre JPA explique a diferença entre o uso da importação de `javax.persistence.Entity` e `org.hibernate.annotations.Entity`
 
@@ -87,7 +87,7 @@
     ALTER TABLE Carros ADD FOREIGN KEY(ID_COR) REFERENCES Cores (ID_COR);
     ```
 
-11) Sobre o ciclo de vida de uma Entidade, Explique cada um dos estados `TRANSIENT`, `MANAGED` e `DETACHED`.
+11) Sobre o ciclo de vida de uma Entidade, explique cada um dos estados `TRANSIENT`, `MANAGED` e `DETACHED`.
 
 12) Qual a finalidade do método `merge()` no JPA. Escreva um exemplo simples para mostrar seu uso.
 
@@ -125,8 +125,7 @@
          CoresDao.java
     ```
 
-    Escreva um método que exemplifique uma consulta usando `select new` do JPA, descreva se precisa de novas classes e se for preciso onde cada uma delas deve ser organizada no projeto seguindo as boas praticas.
-
+    Escreva um método que exemplifique uma consulta usando `select new` do JPA, descreva se precisa de novas classes e se for preciso onde cada uma delas deve ser organizada no projeto seguindo as boas práticas.
 
 19) Sobre a configuração de conexão com banco de dados no Spring leia as afirmativas abaixo:
     1) Para conexão com o banco de dados é necessário apenas adicionar as dependências no arquivo `pom.xml`
@@ -179,6 +178,6 @@
 
 26) Adapte seu código da atividade anterior para um modelo que usa o padrão `Repository` e retorne uma lista de Carros. 
 
-27) Qual a finalidade do `Bean Validation`, Explique e de um exemplo do seu uso em código com a annotation `@Valid`
+27) Qual a finalidade do `Bean Validation`, explique e de um exemplo do seu uso em código com a annotation `@Valid`
 
 28) Explique para que é usado a annotation `@ExceptionHandler` e de um exemplo de método que utiliza ela.
