@@ -180,8 +180,24 @@
     ```
 
 11) Sobre o ciclo de vida de uma Entidade, explique cada um dos estados `TRANSIENT`, `MANAGED` e `DETACHED`.
+    * `TRANSIENT` Estado da entidade onde o JPA ainda não gerencia, é necessário persistir a entidade para manipulação no JPA
+    * `MANAGED` Estado da entidade controlado pela JPA, onde inserções, atualizações e remoções são registradas na classe.
+    * `DETACHED` Estado da entidade não controlado pela JPA, qualquer alteração realizada na entidade neste estado não efetará o banco de dados.
 
 12) Qual a finalidade do método `merge()` no JPA. Escreva um exemplo simples para mostrar seu uso.
+    * O método merge() é utilizado para possibilitar que uma entidade no estado `Detached` retorne ao estado `Managed`
+    ```java
+    EntityManagerFactory factory = Persistence.createEntityManagerFactory("persistenceUnit");
+    EntityManager em = factory.createEntityManager();
+
+    Color color = new Color("Vermelho");
+
+    em.persist(color);
+    em.close();
+
+    color = em.merge(color);
+    color.setName("Red");
+    ```
 
 13) Usando a sintaxe JPQL como poderia ser adaptado o código abaixo para listar todos os dados da tabela `Carros`
     ```java
@@ -189,7 +205,14 @@
         return null;
     }
     ```
-   
+
+    ```java
+    public Lista<Carro> findAll(){
+        String consulta = "SELECT c FROM Carro c";
+        return em.createQuery(consulta, Carro.class).getResultList();
+    }
+    ```
+
 14) Usando a sintaxe JPQL avalie o código abaixo e sinalize quais pontos estão errados no código
     ```java
     public Lista<Pessoa> findById(Long id) {
@@ -198,14 +221,34 @@
         return entityManager.createQuery(consulta, Pessoa.class)
            .setParameter(1, 1)
            .getResultList(); 
-    } 
+    }
     ```
+    * Lista possívelmente está escrita errada, deve ser List.
+    * findById remete a um unico objeto, não há necessidade de retornar uma lista.
+    * Informado o `*` ao invés do alias P.
+    * Não utilizamos `?` como indicador de parametros.
+    * A especificação EntityManager não possui o método createStatement.
+    * Apesar de funcionar `setParameter` por posição é recomendado utilizar o nome do parametro.
+    * `getResultList` neste cenário considerando que não irá retornar uma lista pode ser alterado para `getSingleResult`.
 
 15) Qual a função do `mappedBy` e onde ele deve ser usado?
+    * Indicar que um relacionamento já possui mapeamento em outra entidade, conhecemos isso como relacionamento bidirecional.
+    * Deve ser usado em um relacionamento bidirecional no qual não queremos gerar a tabela.
 
 16) Escreva um exemplo de como fazer um `JOIN` no JPQL?
+    ```java
+    public Cor findCorPorCarro(){
+        String consulta = "SELECT Cor " +
+                          "  FROM Carro" +
+                          "  JOIN Carro.Cor Cor" +
+                          " WHERE Carro.id_carro = :id_carro;
+        return em.createQuery(consulta, Carro.class).getResultList();
+    }
+    ```
 
 17) Qual a função do `select new` no JPA?
+    * Criar um retorno especifico para consulta sem ser uma entidade
+    * Um conceito muito utilizado para retornar arquivos VO
 
 18) Considerando que no seu projeto tem a seguinte estrutura de pacotes:
     ```
@@ -218,7 +261,26 @@
     ```
 
     Escreva um método que exemplifique uma consulta usando `select new` do JPA, descreva se precisa de novas classes e se for preciso onde cada uma delas deve ser organizada no projeto seguindo as boas práticas.
-
+    ```
+    Criar uma classe VO para receber o retorno da consulta
+    
+    br.com.curso.vo.relatorioCarroPorMarca.java
+    ```
+    ```java
+    public List<relatorioCarroPorMarca> relatorioCarroPorMarca(String marca) {
+        String consulta = "SELECT new br.com.curso.vo.relatorioCarroPorMarca( "+
+                          "         Carro.marca, "+
+                          "         Carro.modelo, "+
+                          "         Cor.nome "+
+                          "       ) "+
+                          "  FROM Carro "+
+                          "  JOIN Carro.Cor Cor "+
+                          "  WHERE Carro.marca = :marca";
+        return em.createQuery(consulta, relatorioCarroPorMarca.class)
+            .setParameter("marca",marca)
+            .getResultList();
+    }
+    ```
 19) Sobre a configuração de conexão com banco de dados no Spring leia as afirmativas abaixo:
     1) Para conexão com o banco de dados é necessário apenas adicionar as dependências no arquivo `pom.xml`
     2) As configurações de acesso ao banco de dados devem ficar no arquivo `application.propriedades`
@@ -228,11 +290,54 @@
 
     - [ ] i, apenas
     - [ ] i e ii, apenas
-    - [ ] ii e iii, apenas
+    - [X] ii e iii, apenas
     - [ ] i, ii e iii
     - [ ] Nenhuma das afirmativas
 
 20) Escreva um exemplo de implementação e uso de um `CrudRepository` para a classe da entidade `Cores.java`.
+    ```java
+    package br.com.curso.repository;
+
+    import org.springframework.data.repository.CrudRepository;
+    import org.springframework.stereotype.Repository;
+
+    import br.com.curso.entity.Cor;
+
+    @Repository
+    public interface CorRepository extends CrudRepository<Cor, Integer> {
+
+    }
+    ```
+    ```java
+    package br.com.curso.service;
+
+    import org.springframework.stereotype.Service;
+
+    import br.com.curso.entity.Cor;
+    import br.com.curso.repository.CorRepository;
+
+    @Service
+    public class CorService {
+
+        private final CorRepository corRepository;
+
+        public CrudCorService(CorRepository corRepository) {
+            this.corRepository = corRepository;
+        }
+
+        private void salvar(Cor cor) {
+            corRepository.save(cor);
+        }
+
+        private Iterable<Cor> listar() {
+            return corRepository.findAll();
+        }
+
+        private void remover(Cor cor) {
+            corRepository.deleteById(cor.getId());
+        }
+    }
+    ```
 
 21) Explique como funciona as `Derived Query` e de exemplos de métodos com o uso das opções: `E` , `OU` e `MAIOR QUE`.
 
