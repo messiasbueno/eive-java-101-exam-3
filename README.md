@@ -10,7 +10,7 @@
    - [ ] i e ii
    - [ ] i e iii 
    - [ ] ii e iii
-   - [ ] i, ii e iii
+   - [X] i, ii e iii
 
 2) No `Maven` existem alguns comandos que são conhecidos como `goal`. Sabendo disso leia as afirmativas abaixo.
    1) O comando `mvn test` tem como finalidade executar os testes do projeto
@@ -21,7 +21,7 @@
    - [ ] i, apenas
    - [ ] ii apenas
    - [ ] i e ii apenas
-   - [ ] i e iii apenas
+   - [X] i e iii apenas
    - [ ] ii e iii, apenas
  
 3) Supondo que existe um banco de dados onde neste banco de dados existe uma tabela com o nome `Produto` e nesta tabela temos dois registros: 
@@ -51,21 +51,84 @@
    connection.close();
    ```
 
+   ```
+   1TELEVISÃOTV 52"
+   2RÁRIORÁDIO AM/FM
+   ```
+
 4) Veja o comando abaixo, como ele poderia ser adaptado para imprimir o código gerado na inclusão do registro?
    ```java
    Statement stmt = connection.createStatement();
-   stmt.execute("INSERT INTO Produto VALUES ('Cadeira', 'Cadeira 4 pernas')");  
+   stmt.execute("INSERT INTO Produto VALUES ('Cadeira', 'Cadeira 4 pernas')");
    ```
 
-5) Oque é um pool de conexão e qual sua vantagem? Explique.
+   ```java
+   Statement stmt = connection.createStatement();
+   stmt.execute("INSERT INTO Produto VALUES ('Cadeira', 'Cadeira 4 pernas')",
+       Statement.RETURN_GENERATED_KEYS);
+
+   ResultSet rst = stmt.getGeneratedKeys();
+   rst.next();
+   System.out.println(rst.getInt("ID"));
+   ```
+
+5) O que é um pool de conexão e qual sua vantagem? Explique.
+   * De forma prática, o pool de conexões é um cache de conexões ao banco de dados. Esta prática é realizada para que seja possível aproveitar conexões para requisições posteriores.
+   * A vantagem que temos ao utilizar dessa prática é controle de acesso ao banco garantindo sempre um bom desempenho e um uso adequado dos recursos
 
 6) De um exemplo de uso de pool de conexão usando a biblioteca c3p0
+   ```java
+   import java.sql.Connection;
+   import java.sql.SQLException;
+   import javax.sql.DataSource;
+   import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+   class ConnectionFactory {
+       private DataSource dataSource;
+
+       public ConnectionFactory() {
+           ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();
+
+           comboPooledDataSource.setJdbcUrl("JdbcUrl");
+           comboPooledDataSource.setUser("User");
+           comboPooledDataSource.setPassword("Password");
+
+           this.dataSource = comboPooledDataSource;
+       }
+
+       public Connection getConnection() throws SQLException {
+           return this.dataSource.getConnection();
+       }
+   }
+
+   public class Main {
+       public static void main(String[] args) {
+           ConnectionFactory connectionFactory = new ConnectionFactory();
+           try {
+               Connection connection = connectionFactory.getConnection();
+               // utilizar a conexão
+               connection.close();
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
 
 7) Quais as desvantagens de usar o JDBC em uma aplicação?
+   * Código é mais complexo e muito verboso
+   * Alto acoplamento com o banco de dados
 
 8) Explique de forma sucinta como funciona o ciclo de vida de uma aplicação JPA
+   * Uma entidade JPA é criada no estado transiente, assim o JPA não gerencia suas modificações.
+   * Se uma entidade no estado transiente é persistida ou é retornada do banco de dados, então o JPA passa a gerenciá-la, liberando acesso a funcionalidades de incluir, atualizar ou até mesmo remover.
+      * Podemos sincronizar com o banco a informação ou até mesmo salvar definitivamente.
+   * Quando limpamos ou fechamos a conexão com a entidade, estamos dizendo para o JPA que não deve mais gerenciar esta entidade, não será propagada as alterações e afins da mesma.
+      * É possível retornar uma entidade que não está sendo gerenciada para que ela seja novamente gerenciada pelo JPA
 
 9) Sobre JPA explique a diferença entre o uso da importação de `javax.persistence.Entity` e `org.hibernate.annotations.Entity`
+   * A classe Entity do hibernate é uma implementação da especificação da Entity do Javax.
+   * Utilizando a Entity do hibernate o código fica acoplado com o hibernate, já utilizando da Entity do javax temos a possibilidade de trocar o hibernate por outro framework sem grandes alterações.
 
 10) Dado a estrutura de uma tabela `Carros`, escreva como seria o mapeamento em JAVA usando o JPA 
     ```SQL
@@ -85,6 +148,35 @@
     );
 
     ALTER TABLE Carros ADD FOREIGN KEY(ID_COR) REFERENCES Cores (ID_COR);
+    ```
+
+    ```java
+    //Imports
+    
+    @Entity
+    @Table(name = "Carros")
+    public class Car {
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(name = "id_carro")
+        private Integer id;
+
+        @Column(name = "marca")
+        private String brand;
+
+        @Column(name = "modelo")
+        private String model;
+        
+        @Column(name = "placa")
+        private String plate;
+        
+        @ManyToOne
+        @Column(name = "id_cor")
+        private Color color;
+
+        //getters and setters
+    }
     ```
 
 11) Sobre o ciclo de vida de uma Entidade, explique cada um dos estados `TRANSIENT`, `MANAGED` e `DETACHED`.
