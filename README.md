@@ -1,23 +1,23 @@
 # eive-java-101-exam-3
 
-1) No Maven o arquivo `pom.xml` é o principal arquivo de configuração de dependências. Sabendo disso leia as afirmativas abaixo.
+1) No Maven o arquivo `pom.xml` é o principal arquivo de configuração de dependências. Sabendo disso, leia as afirmativas abaixo.
    1) A dependências podem ser adicionadas diretamente na pasta lib do projeto e este após compilar continua reconhecendo.
    2) A dependências seguem um padrão de organização, sempre devem ser adicionadas na sessão `<dependencies>` do arquivo.
    3) Sempre que uma nova dependência é adicionada no projeto o `Mavem` identifica e baixa de forma automática sem que o desenvolvedor precise se preocupar.
 
-   Assinale a alternativa que corresponde apenas as informações verdadeiras.
+   Assinale a alternativa que corresponde apenas às informações verdadeiras.
    - [ ] iii, apenas
    - [ ] i e ii
    - [ ] i e iii 
    - [ ] ii e iii
    - [X] i, ii e iii
 
-2) No `Maven` existem alguns comandos que são conhecidos como `goal`. Sabendo disso leia as afirmativas abaixo.
+2) No `Maven` existem alguns comandos que são conhecidos como `goal`. Sabendo disso, leia as afirmativas abaixo.
    1) O comando `mvn test` tem como finalidade executar os testes do projeto
-   2) O comando `mvn deploy production` é usado quando precisa gerar o artefado para o ambiente de produção
+   2) O comando `mvn deploy production` é usado quando precisa gerar o artefato para o ambiente de produção
    3) `mvn install` é o goal que realiza a instalação do projeto no diretório local
 
-   Assinale a alternativa que corresponde apenas as informações verdadeiras.
+   Assinale a alternativa que corresponde apenas às informações verdadeiras.
    - [ ] i, apenas
    - [ ] ii apenas
    - [ ] i e ii apenas
@@ -76,7 +76,7 @@
    * De forma prática, o pool de conexões é um cache de conexões ao banco de dados. Esta prática é realizada para que seja possível aproveitar conexões para requisições posteriores.
    * A vantagem que temos ao utilizar dessa prática é controle de acesso ao banco garantindo sempre um bom desempenho e um uso adequado dos recursos
 
-6) De um exemplo de uso de pool de conexão usando a biblioteca c3p0
+6) Dê um exemplo de uso de pool de conexão usando a biblioteca c3p0
    ```java
    import java.sql.Connection;
    import java.sql.SQLException;
@@ -182,7 +182,7 @@
 11) Sobre o ciclo de vida de uma Entidade, explique cada um dos estados `TRANSIENT`, `MANAGED` e `DETACHED`.
     * `TRANSIENT` Estado da entidade onde o JPA ainda não gerencia, é necessário persistir a entidade para manipulação no JPA
     * `MANAGED` Estado da entidade controlado pela JPA, onde inserções, atualizações e remoções são registradas na classe.
-    * `DETACHED` Estado da entidade não controlado pela JPA, qualquer alteração realizada na entidade neste estado não efetará o banco de dados.
+    * `DETACHED` Estado da entidade não controlada pela JPA, qualquer alteração realizada na entidade neste estado não afetará o banco de dados.
 
 12) Qual a finalidade do método `merge()` no JPA. Escreva um exemplo simples para mostrar seu uso.
     * O método merge() é utilizado para possibilitar que uma entidade no estado `Detached` retorne ao estado `Managed`
@@ -201,13 +201,13 @@
 
 13) Usando a sintaxe JPQL como poderia ser adaptado o código abaixo para listar todos os dados da tabela `Carros`
     ```java
-    public Lista<Carro> findAll(){
+    public List<Carro> findAll(){
         return null;
     }
     ```
 
     ```java
-    public Lista<Carro> findAll(){
+    public List<Carro> findAll(){
         String consulta = "SELECT c FROM Carro c";
         return em.createQuery(consulta, Carro.class).getResultList();
     }
@@ -223,12 +223,12 @@
            .getResultList(); 
     }
     ```
-    * Lista possívelmente está escrita errada, deve ser List.
-    * findById remete a um unico objeto, não há necessidade de retornar uma lista.
+    * Lista possivelmente está escrita errada, deve ser um List.
+    * findById remete a um único objeto, não há necessidade de retornar uma lista.
     * Informado o `*` ao invés do alias P.
-    * Não utilizamos `?` como indicador de parametros.
+    * Não utilizamos `?` como indicador de parâmetros.
     * A especificação EntityManager não possui o método createStatement.
-    * Apesar de funcionar `setParameter` por posição é recomendado utilizar o nome do parametro.
+    * Apesar de funcionar `setParameter` por posição é recomendado utilizar o nome do parâmetro.
     * `getResultList` neste cenário considerando que não irá retornar uma lista pode ser alterado para `getSingleResult`.
 
 15) Qual a função do `mappedBy` e onde ele deve ser usado?
@@ -247,7 +247,7 @@
     ```
 
 17) Qual a função do `select new` no JPA?
-    * Criar um retorno especifico para consulta sem ser uma entidade
+    * Criar um retorno específico para consulta sem ser uma entidade
     * Um conceito muito utilizado para retornar arquivos VO
 
 18) Considerando que no seu projeto tem a seguinte estrutura de pacotes:
@@ -290,9 +290,9 @@
 
     - [ ] i, apenas
     - [ ] i e ii, apenas
-    - [X] ii e iii, apenas
+    - [ ] ii e iii, apenas
     - [ ] i, ii e iii
-    - [ ] Nenhuma das afirmativas
+    - [X] Nenhuma das afirmativas
 
 20) Escreva um exemplo de implementação e uso de um `CrudRepository` para a classe da entidade `Cores.java`.
     ```java
@@ -340,8 +340,45 @@
     ```
 
 21) Explique como funciona as `Derived Query` e de exemplos de métodos com o uso das opções: `E` , `OU` e `MAIOR QUE`.
+    * Derived Query é a consulta gerada com base no nome do método, o spring usa as informações no método como referência para montar a consulta no banco sem necessariamente escrever comandos Sql's.
+    ```java
+    package br.com.curso.repository;
 
-22) Explique qual a aplicabilidade ideal para os Repository `CrudRepository`, `PaginAndSortingRepository` e `JpaRepository`. Escreva a forma de como declarar a assinatura de cada um deles.
+    import org.springframework.data.repository.CrudRepository;
+    import org.springframework.stereotype.Repository;
+
+    import br.com.curso.entity.Carro;
+
+    @Repository
+    public interface CarroRepository extends CrudRepository<Carro, Integer> {
+        List<Carro> findByMarcaAndModelo(String marca, String modelo);
+        List<Carro> findByMarcaOrModelo(String marca, String modelo);
+        List<Carro> findByIdGreaterThan(Integer id);
+    }
+    ```
+
+22) Explique qual a aplicabilidade ideal para os Repository `CrudRepository`, `PagingAndSortingRepository` e `JpaRepository`. Escreva a forma de como declarar a assinatura de cada um deles.
+    * `CrudRepository` é utilizado para criação de repositórios com necessidades básicas de um crud, que não tenha necessidade de controle de paginação, ordenação, ações em lote, etc.
+    ```java
+    @Repository
+    public interface CorRepository extends CrudRepository<Cor, Integer> {
+
+    }
+    ```
+    * `PagingAndSortingRepository` é utilizado para criação de repositórios com necessidades de um crud, porém permitindo controlar a paginação e ordenação dos dados, muito aplicado em entidades grandes que podem trazer problema de performance.
+    ```java
+    @Repository
+    public interface CorRepository extends PagingAndSortingRepository<Cor, Integer> {
+
+    }
+    ```
+    * `JpaRepository` é utilizado quando temos uma necessidade em realizar operações em lotes, fazer em grande escala, exclusões, inserções, etc e herda as funcionalidades do PagingAndSortingRepository`
+    ```java
+    @Repository
+    public interface CorRepository extends JpaRepository<Cor, Integer> {
+
+    }
+    ```
 
 23) Dado o código abaixo:
     ```SQL
@@ -369,12 +406,156 @@
        - `Placa`
        - `Nome da cor`
 
+    ```java
+    public interface CarroPorCor {
+        String getMarca();
+        String getModelo();
+        String getPlaca();
+        String getnomeCor();
+    }
+    ```
+    ```java
+    @Repository
+    public interface CarroRepository extends CrudRepository<Carro, Integer> {
+        @Query(value = "SELECT c.marca, c.modelo, c.placa, co.nome AS nomeCor FROM carros c JOIN cores co ON co.id_cor = c.id_cor WHERE UPPER(co.nome) = :nomeCor", nativeQuery = true)
+        List<CarroPorCor> findCarrosPorCor(String nomeCor);
+    }
+    ```
+
 24) Explique para que servem as anotações `@Repository`, `@Service`, `@Controller`, `@SpringBootApplication`
+    * O Spring faz leitura do código fonte em tempo de execução, para ativar esta leitura utilizamos a anotação @SpringBootApplication, às outras anotações são utilizadas para indicar ao spring que ele deve ler esta classe.
+    * `@Repository` anotação utilizada no spring para manipulações da entidade com o banco de dados.
+    * `@Service` anotação utilizada no spring para decorar a camada de serviço
+    * `@Controller` anotação utilizada no spring para manipuladores de controles, como o controle web, como métodos para mapeamento de requisição
 
 25) Escreva uma classe que contenha um método REST que retorna uma lista fixa de Carros, utilize o padrão DTO.
+    ```java
+    @Controller
+    public class CarroController {
+        @RequestMapping("/carros")
+        @ResponseBody
+        public List<CarroDto> lista() {
+            Cor azul = new Cor("azul");
+            
+            List<Carro> carros = new ArrayList<Carro>();
+            
+            Carro onix = new Carro("Chevrolet","Onix","AXC1234",azul);
+            carros.add(onix);
+            Carro cruze = new Carro("Chevrolet","Cruze","AXC1234",azul);
+            carros.add(cruze);
+            Carro tracker = new Carro("Chevrolet","Tracker","AXC1234",azul);
+            carros.add(tracker);
+            
+            return CarroDto.converter(carros);
+        }
+    }
+
+    ```
 
 26) Adapte seu código da atividade anterior para um modelo que usa o padrão `Repository` e retorne uma lista de Carros. 
 
-27) Qual a finalidade do `Bean Validation`, explique e de um exemplo do seu uso em código com a annotation `@Valid`
+    ```java
+    @RestController
+    @RequestMapping("/carros")
+    public class CarroController {
 
+        @Autowired
+        private CarroRepository carroRepository;
+        
+        @GetMapping
+        public List<CarroDto> lista() {
+            List<Carro> carros = carroRepository.findAll();
+            return CarroDto.converter(carros);
+        }
+    }
+    ```
+
+27) Qual a finalidade do `Bean Validation`, explique e dê um exemplo do seu uso em código com a annotation `@Valid`
+    * `Bean Validation` é uma especificação que permite validar objetos com facilidade. A vantagem de usar Bean Validation é que as restrições ficam inseridas nas classes de modelo.
+    ```java
+    public class CarroForm {
+
+        @NotNull @NotEmpty @Length(min = 5)
+        private String marca;
+        
+        @NotNull @NotEmpty @Length(min = 5)
+        private String modelo;
+        
+        @NotNull @NotEmpty
+        private String placa;
+
+        @NotNull @NotEmpty
+        private String nomeCor;
+
+        public Carro converter(CorRepository corRepository) {
+            Cor cor = corRepository.findByNome(this.nomeCor);
+            return new Carro(this.marca, this.modelo, this.placa, cor);
+        }
+
+    }
+    ```
+    ```java
+    @RestController
+    @RequestMapping("/carros")
+    public class CarroController {
+
+        @Autowired
+        private CarroRepository carroRepository;
+        
+        @Autowired
+        private CorRepository corRepository;
+
+        @PostMapping
+        @Transactional
+        public CarroDto cadastrar(@RequestBody @Valid CarroForm carroForm) {
+            Carro carro = carroForm.converter(corRepository);
+            carroRepository.save(carro);
+
+            return new CarroDto(carro);
+        }
+    }
+    ```
 28) Explique para que é usado a annotation `@ExceptionHandler` e de um exemplo de método que utiliza ela.
+    * `@ExceptionHandler` usado para indicar que o método será executado quando essa exceção for encontrada.
+    ```java
+    class ErroDeFormularioDto {
+        
+        private String campo;
+        private String erro;
+        
+        public ErroDeFormularioDto(String campo, String erro) {
+            this.campo = campo;
+            this.erro = erro;
+        }
+
+        public String getCampo() {
+            return campo;
+        }
+
+        public String getErro() {
+            return erro;
+        }
+    }
+
+    @RestControllerAdvice
+    public class ErroDeValidacaoHandler {
+
+        @Autowired
+        private MessageSource messageSource;
+        
+        @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        public List<ErroDeFormularioDto> handle(MethodArgumentNotValidException exception) {
+            List<ErroDeFormularioDto> dto = new ArrayList<>();
+
+            List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
+            fieldErrors.forEach(e -> {
+                String mensagem = messageSource.getMessage(e, LocaleContextHolder.getLocale());
+                ErroDeFormularioDto erro = new ErroDeFormularioDto(e.getField(), mensagem);
+                dto.add(erro);
+            });
+
+            return dto;
+        }
+    }
+    ```
